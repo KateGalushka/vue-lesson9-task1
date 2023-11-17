@@ -24,7 +24,7 @@
 				return this.$route.params.id;
 			},
 			creatingMode() {
-				return (this.$route.params.id)? false: true
+				return !this.$route.params.id
 			},
 			
 		},

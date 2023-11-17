@@ -11,9 +11,7 @@
 </template>
 
 <script>
-	import { mapGetters,
-		//  mapActions
-		 } from 'vuex';
+	import { mapGetters } from 'vuex';
 	import CompanyItem from './CompanyItem.vue';
 
 	export default {
@@ -27,14 +25,7 @@
 			return !this.getFilteredList.length;
 		}
 	 },
-	//  methods: {
-	// 	...mapActions(['loadCompaniesData']),
-	//  },
-
-	//  mounted() {
-	// 	this.loadCompaniesData();
-	// },
-
+	 
 }
 </script>
 

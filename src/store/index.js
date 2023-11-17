@@ -4,37 +4,28 @@ import { companies } from '@/store/data';
 export default createStore({
     state: {
 		companiesList: companies,
-		nameFilter: null,
-		rateFilter: null,
-		yearFilter: null,
-		ownerFilter: null,
+		filterObj:{}
 	 },
     getters: {
 		 getCompaniesList: ({ companiesList }) => companiesList,
 		 getCompanyById: (state) => (compId) => {
 			return {...state.companiesList.find(company=>company.id == compId)}
 		 	},
-		 nameFilterVal: ({ nameFilter }) => nameFilter,
-		 rateFilterVal: ({ rateFilter }) => rateFilter,
-		 yearFilterVal: ({ yearFilter }) => yearFilter,
-		 ownerFilterVal: ({ ownerFilter }) => ownerFilter,
-		 getFilteredList: ({ companiesList, nameFilter, rateFilter, yearFilter, ownerFilter }) => {
-			 if (nameFilter || rateFilter || yearFilter || ownerFilter){
+		 getFilterObj: ({filterObj}) => filterObj,
+		 getFilteredList: ({ companiesList, filterObj }) => {
+			let {name, rate, year, owner} = filterObj;
+			if (name || rate || year || owner){
 				return companiesList.filter(company =>{
-					const nameMatch = !nameFilter || (company.name).toLowerCase().includes(nameFilter.toLowerCase());
-					const rateMatch = !rateFilter || parseFloat(company.rate) == rateFilter;
-					const yearMatch = !yearFilter || company.year == yearFilter;
-					const ownerMatch = !ownerFilter || (company.owner).toLowerCase().includes(ownerFilter.toLowerCase());
+					const nameMatch = !name || (company.name).toLowerCase().includes(name.toLowerCase());
+					const rateMatch = !rate || parseFloat(company.rate) == rate;
+					const yearMatch = !year || company.year == year;
+					const ownerMatch = !owner || (company.owner).toLowerCase().includes(owner.toLowerCase());
 					return nameMatch && rateMatch && yearMatch && ownerMatch;
 				})
 			 } else return companiesList;
 		 }
 	 },
     mutations: {
-		// setCompaniesList(state, data){
-		// 	state.companiesList = data;
-		// 	 console.log(state.companiesList);
-		// },
 		deleteCompany(state, compId){
 			state.companiesList = state.companiesList.filter(company=>company.id !== compId);
 			console.log('list after deleting: ', state.companiesList );
@@ -47,29 +38,12 @@ export default createStore({
 			state.companiesList = state.companiesList.map(company => (company.id === compData.id) ? compData : company );
 			console.log('list after updating: ', state.companiesList);
 		},
-		updateNameFilter(state, val){
-			state.nameFilter = val;
+		updateFilterObj(state, filterDataObj){
+			state.filterObj = filterDataObj;
 		 },
-		updateRateFilter(state, val){
-			state.rateFilter = val;
-		 },
-		 updateYearFilter(state, val){
-			state.yearFilter = val;
-		 },
-		 updateOwnerFilter(state, val){
-			state.ownerFilter = val;
-		 },
-		 clearFilters(state){
-			state.nameFilter = null;
-			state.rateFilter = null;
-			state.yearFilter = null;
-			state.ownerFilter = null;
-		 }
-	 },
+		
+	},
     actions: {
-		// loadCompaniesData({ commit}){
-		// 	commit('setCompaniesList', companies)
-		// },
 		onDeleteCompany({ commit }, compId){
 			commit('deleteCompany', compId)
 		 },
@@ -79,21 +53,10 @@ export default createStore({
 		 onUpdateCompany({ commit }, compData){
 			commit('updateCompany', compData)
 		 },
-		 updateNameFilter({ commit }, val){
-			 commit('updateNameFilter', val)
+		 updateFilterObj({ commit }, filterData){
+			 commit('updateFilterObj', filterData)
 		 },
-		 updateRateFilter({ commit }, val){
-			 commit('updateRateFilter', val)
-		 },
-		 updateYearFilter({ commit }, val){
-			 commit('updateYearFilter', val)
-		 },
-		 updateOwnerFilter({ commit }, val){
-			 commit('updateOwnerFilter', val)
-		 },
-		 onClearFilters({ commit }){
-			commit('clearFilters')
-		 }
+		
 	 },
     modules: {},
 })

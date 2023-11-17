@@ -3,68 +3,49 @@
 	<div class="filters__container">
 		<label for="name">
 			Name
-			<input v-model="currentNameFilter" type="text">
+			<input v-model="filterObj.name" type="text">
 		</label>
 		<label for="rate">
 			Rate
-			<input v-model="currentRateFilter" type="number">
+			<input v-model="filterObj.rate" type="number">
 		</label>
 		<label for="year">
 			Year
-			<input v-model="currentYearFilter" type="number">
+			<input v-model="filterObj.year" type="number">
 		</label>
 		<label for="owner">
 			Owner
-			<input v-model="currentOwnerFilter" type="text">
+			<input v-model="filterObj.owner" type="text">
 		</label>
 		<button @click="onClearFilters">Clear all filters</button>
 	</div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapActions } from 'vuex';
 
 	export default {
 		name: "CompaniesFilters",
+		data() {
+			return {
+				filterObj: {}
+			}
+		},
 
-		computed: {
-			...mapGetters(['nameFilterVal', 'rateFilterVal', 'yearFilterVal', 'ownerFilterVal']),
-
-			currentNameFilter: {
-				get(){
-					return this.nameFilterVal
+		watch: {
+			filterObj: {
+				handler(newFilterValue){
+					this.updateFilterObj(newFilterValue)
 				},
-				set(val){
-					this.updateNameFilter(val);
-				}
-			},
-			currentRateFilter:{
-				get(){
-					return this.rateFilterVal;
-				},
-				set(val){
-					this.updateRateFilter(val);
-				}
-			},
-			currentYearFilter:{
-				get(){
-					return this.yearFilterVal;
-				},
-				set(val){
-					this.updateYearFilter(val);
-				}
-			},
-			currentOwnerFilter:{
-				get(){
-					return this.ownerFilterVal;
-				},
-				set(val){
-					this.updateOwnerFilter(val);
-				}
+				deep:true
 			}
 		},
 		methods: {
-			...mapActions(['updateNameFilter', 'updateRateFilter', 'updateYearFilter', 'updateOwnerFilter', 'onClearFilters'])
+			...mapActions(['updateFilterObj']),
+
+			onClearFilters(){
+				this.filterObj={}
+			}
 		},
 	}
 </script>

@@ -2,19 +2,19 @@
 	<div class="editor">
 		<label>
 			Name<span class="required">*</span>
-			<input v-model="compName" type="text">
+			<input v-model="newCompany.name" type="text">
 		</label>
 		<label>
 			Rate<span class="required">*</span>
-			<input v-model="compRate" type="number">
+			<input v-model="newCompany.rate" type="number">
 		</label>
 		<label>
 			Year<span class="required">*</span>
-			<input v-model="compYear" type="number">
+			<input v-model="newCompany.year" type="number">
 		</label> 
 		<label >
 			Owner<span class="required">*</span>
-			<input v-model="compOwner" type="text">
+			<input v-model="newCompany.owner" type="text">
 		</label>
 		<button :disabled="isCreateBtnDisabled" @click="createCompany" >Create</button>
 		</div>
@@ -27,30 +27,23 @@ import { mapActions } from 'vuex'
 
 		data() {
 			return {
-				compName: null,
-				compRate: null,
-				compYear: null,
-				compOwner: null,
 				newCompany: {},
 			}
 		},
 		computed: {
 			isCreateBtnDisabled() {
-				return !this.compName || !this.compRate || !this.compYear || !this.compOwner
+				let {name, rate, year, owner} = this.newCompany;
+				return !name || !rate || !year || !owner
 			}
 		},
 		methods: {
 			...mapActions(['onAddNewCompany']),
 			
 			createCompany(){
-				this.newCompany = {
+				this.onAddNewCompany({
 					id: new Date().getTime(),
-					name: this.compName,
-					rate: this.compRate,
-					year: this.compYear,
-					owner: this.compOwner
-				};
-				this.onAddNewCompany(this.newCompany);
+					...this.newCompany
+				});
 				this.$router.push({
 					name: 'home'
 				})
